@@ -7,6 +7,10 @@ output:
     self_contained: false
 ---
 
+
+
 ## Project Thoughts
+
+
 
 I am interested in exploring data related to the impact of welfare programs and other progressive economic policies on employment rates, investigating whether or not forms of financial aid given to low-income Americans disincentivizes them from working jobs. In particular, I would like to do a difference-in-difference analysis of a specific economic state-level policy that expanded welfare programs and measure the differences for 2 states (1 that implemented welfare expansion and 1 that did not) before and after the welfare expansion.  

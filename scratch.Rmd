@@ -1,0 +1,20 @@
+---
+title: "Scratch"
+author: "Iris Cheng"
+date: "2023-10-13"
+output: pdf_document
+---
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+compul = read_csv("cvil_22_09_08.csv", show_col_types = FALSE)
+compul
+```
+
+
+```{r}
+compul |>
+  filter(cmp_vt == 1)
+```
+

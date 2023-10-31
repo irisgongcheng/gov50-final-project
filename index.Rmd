@@ -14,6 +14,17 @@ output:
 Among countries without compulsory voting, does the amount of information needed to register to vote influence voter turnout in parliamentary elections? In this study, I plan to examine the extent to which additional requirements for proving voting elibility harm efforts to increase turnout in different countries. I hypothesize that the more restrictive voter ID laws are in a given country, the lower voter turnout will be. This hypothesis stems from the theory that a) requiring additional documents to prove voting eligibility makes it more difficult for voters to cast a ballot and/or b) requiring additional documents to prove voting eligibility decreases the perceived accessibility of voting and discourages prospective voters from even attempting to cast a vote. I suspect that some combination of these two factors will increase the barriers - either logistical or perceptual - to casting a ballot. My explanatory variable is `id_type` - or the type of voter ID law. It is measured in 1 of 3 categories: 1. Voter must give basic personal details, 2: Voter is requested/required to present proof of identification or voter registration card, not photo ID, or 3: Voter to present photo identification and/or other biometric data. My outcome variable is voter turnout in parliamentary elections, measured in the percentage of the population that casted a vote in a country's parliamentary election. If I observe greater voter turnout in parliamentary elections for countries with less restrictive voter ID laws, this would provide support for my hypothesis. If, on the other hand, I observe greater voter turnout in parliamentary elections for countries with more restrictive voter ID laws (potentially because more people turn out when they believe elections are more secure), this would provide evidence against my hypothesis. When I run my regression of the voter turnout values on the voter ID law variable, a negative, significant coefficient would indicate support for my hypothesis. This is because lower values of the voter ID law variable indicate less restrictive laws, and in order for the data to support my hypothesis, those would need to correspond with higher voter turnout and vice versa. 
 
 ```{r}
+library(tidyverse)
+library(ggplot2)
+compul = read_csv("cvil_22_09_08.csv", show_col_types = FALSE)
+turnout = read_csv("voterturnout.csv", show_col_types = FALSE)
+vote = compul |>
+  inner_join(turnout, by = c("cntry" = "Country"))
+vote = vote |>
+  select(cntry:id_type_lab, turnout)
+```
+
+```{r}
 vote
 ```
 

@@ -29,12 +29,12 @@ vote
 ```
 
 ```{r}
-plot_turnout = ggplot(data = vote, mapping = aes(x = turnout)) + 
+turnout_hist = ggplot(data = vote, mapping = aes(x = turnout)) + 
   geom_histogram() + labs(
     x = "Turnout Rate (%)",
     y = "Number of Countries"
   )
-plot_turnout
+turnout_hist
 ```
 
-This visualization depicts the parliamentary turnout rates of all of the countries in the data set. There is a cluster in the middle of the x-axis, between 50% and 75%, indicating that many countries have turnout rates within this range. There are a few observations between 0% and 25%, indicating that some countries have relatively low turnout rates. There are a few observations between 75% and 100%, indicating that some countries have relatively high turnout rates. 
+This visualization depicts the parliamentary turnout rates of all of the countries in the data set. There is a cluster in the middle of the x-axis, between 50% and 75%, indicating that many countries have turnout rates within this range. There are a few observations between 0% and 25%, indicating that some countries have relatively low turnout rates. There are a few observations between 75% and 100%, indicating that some countries have relatively high turnout rates.

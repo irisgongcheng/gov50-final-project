@@ -18,3 +18,14 @@ compul |>
   filter(cmp_vt == 1)
 ```
 
+```{r}
+turnout = read_csv("voterturnout.csv", show_col_types = FALSE)
+```
+
+```{r}
+vote = compul |>
+  inner_join(turnout, by = c("cntry" = "Country"))
+vote = vote |>
+  select(cntry:id_type_lab, turnout)
+```
+

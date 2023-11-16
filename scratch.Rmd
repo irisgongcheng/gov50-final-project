@@ -29,3 +29,7 @@ vote = vote |>
   select(cntry:id_type_lab, turnout)
 ```
 
+```{r}
+cor(vote$turnout, vote$id_type, use = "pairwise")
+```
+

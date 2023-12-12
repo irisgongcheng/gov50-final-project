@@ -8,10 +8,19 @@ output:
 ---
 
 
+## Introduction 
 
-## Project Thoughts
+Among countries without compulsory voting, does the amount of information needed to register to vote and the amount of government-provided voter registration support influence voter turnout in parliamentary elections? In this study, I plan to examine the extent to which additional requirements for proving voting eligibility and assisting voters with voter registration influence efforts to increase turnout in different countries. I hypothesize that the more restrictive voter ID laws are and the less assistance that is provided in a given country, the lower voter turnout will be. This hypothesis stems from the theory that a) requiring additional documents to prove voting eligibility makes it more difficult for voters to cast a ballot and/or b) requiring additional documents to prove voting eligibility decreases the perceived accessibility of voting and discourages prospective voters from even attempting to cast a vote. I suspect that some combination of these two factors will increase the barriers - either logistical or perceptual - to casting a ballot. In terms of providing assistance, my hypothesis stems from the idea that a government providing more assistance to voters to register will decrease barriers to voting itself and therefore increase turnout. 
 
-Among countries without compulsory voting, does the amount of information needed to register to vote and the amount of government-provided voter registration support influence voter turnout in parliamentary elections? In this study, I plan to examine the extent to which additional requirements for proving voting eligibility and assisting voters with voter registration influence efforts to increase turnout in different countries. I hypothesize that the more restrictive voter ID laws are and the less assistance that is provided in a given country, the lower voter turnout will be. This hypothesis stems from the theory that a) requiring additional documents to prove voting eligibility makes it more difficult for voters to cast a ballot and/or b) requiring additional documents to prove voting eligibility decreases the perceived accessibility of voting and discourages prospective voters from even attempting to cast a vote. I suspect that some combination of these two factors will increase the barriers - either logistical or perceptual - to casting a ballot. In terms of providing assistance, my hypothesis stems from the idea that a government providing more assistance to voters to register will decrease barriers to voting itself and therefore increase turnout. My explanatory variables are `id_type` - the type of voter ID law - and `reg_law` - the type of voter registration assistance, if any. Voter ID law is measured in 1 of 3 categories: 1. Voter must give basic personal details, 2. Voter is requested/required to present proof of identification or voter registration card, not photo ID, or 3. Voter to present photo identification and/or other biometric data. My outcome variable is voter turnout in parliamentary elections, measured in the percentage of the population that casted a vote in a country's parliamentary election. If I observe greater voter turnout in parliamentary elections for countries with less restrictive voter ID laws, this would provide support for my hypothesis. If, on the other hand, I observe greater voter turnout in parliamentary elections for countries with more restrictive voter ID laws (potentially because more people turn out when they believe elections are more secure), this would provide evidence against my hypothesis. When I run my regression of the voter turnout values on the voter ID law variable, a negative, significant coefficient would indicate support for my hypothesis. This is because lower values of the voter ID law variable indicate less restrictive laws, and in order for the data to support my hypothesis, those would need to correspond with higher voter turnout and vice versa. The voter registration assistance variable is measured in 3 categories: 1. Lassie-faire, 2. Assisted, 3. Automatic. If I observe greater voter turnout in parliamentary elections for countries with more support for voter registration (closer to 3), this would provide support for my hypothesis. When I run my regression of the voter turnout values on the registration law variable, a positive, significant coefficient would indicate support for my hypothesis.
+This data is interesting because it addresses the critical question of how countries can increase political participation without sacrificing the integrity of elections. Does increasing election security necessarily disenfranchise potential voters, and does increasing the accessibility of the ballot box come at the cost of potential voter fraud?  
+
+## Data 
+
+My data is sourced from two separate data sets. The first is the The Comparative Voter ID Law Index from Tom Barton, which records the voter identification law provisions for countries and devolved regions around the world. The second is a compilation of voter turnout rates for parliamentary elections by International IDEA. I filtered the data to exclude any countries with compulsory voting, which could be a potentially confounding variable. The data from the data sets is compiled from a variety of international authorities on democracy and election security. 
+
+My explanatory variables are `id_type` - the type of voter ID law - and `reg_law` - the type of voter registration assistance, if any. Voter ID law is measured in 1 of 3 categories: 1. Voter must give basic personal details, 2. Voter is requested/required to present proof of identification or voter registration card, not photo ID, or 3. Voter to present photo identification and/or other biometric data. My outcome variable is voter turnout in parliamentary elections, measured in the percentage of the population that casted a vote in a country's parliamentary election. If I observe greater voter turnout in parliamentary elections for countries with less restrictive voter ID laws, this would provide support for my hypothesis. If, on the other hand, I observe greater voter turnout in parliamentary elections for countries with more restrictive voter ID laws (potentially because more people turn out when they believe elections are more secure), this would provide evidence against my hypothesis. When I run my regression of the voter turnout values on the voter ID law variable, a negative, significant coefficient would indicate support for my hypothesis. This is because lower values of the voter ID law variable indicate less restrictive laws, and in order for the data to support my hypothesis, those would need to correspond with higher voter turnout and vice versa. The voter registration assistance variable is measured in 3 categories: 1. Lassie-faire, 2. Assisted, 3. Automatic. If I observe greater voter turnout in parliamentary elections for countries with more support for voter registration (closer to 3), this would provide support for my hypothesis. When I run my regression of the voter turnout values on the registration law variable, a positive, significant coefficient would indicate support for my hypothesis.
+
+My research design is cross-sectional, which means it is observational in nature and analyzes data from a single moment in time (does not compare turnout before and after the implementation of an assistance/voter ID law). 
 
 ```{r}
 library(tidyverse)
@@ -39,41 +48,67 @@ turnout_hist = ggplot(data = vote, mapping = aes(x = turnout)) +
 turnout_hist
 ```
 
-This visualization depicts the parliamentary turnout rates of all of the countries in the data set. There is a cluster in the middle of the x-axis, between 50% and 75%, indicating that many countries have turnout rates within this range. There are a few observations between 0% and 25%, indicating that some countries have relatively low turnout rates. There are a few observations between 75% and 100%, indicating that some countries have relatively high turnout rates.
+This visualization depicts the parliamentary turnout rates of all of the countries in the data set - the dependent variable. There is a cluster in the middle of the x-axis, between 50% and 75%, indicating that many countries have turnout rates within this range. There are a few observations between 0% and 25%, indicating that some countries have relatively low turnout rates. There are a few observations between 75% and 100%, indicating that some countries have relatively high turnout rates.
 
-```{r}
-id_hist = ggplot(data = vote, mapping = aes(x = id_type)) + 
-  geom_histogram() + labs(
-    x = "Type of Voter ID Law",
-    y = "Number of Countries"
-  )
-id_hist
-```
-This visualization depicts the number of countries that have each kind of voter ID law (denoted by 1, 2, or 3). It looks like there under 25 countries for ID law type 1 and 2, and there are significantly more countries (about 150) that have voter ID law type 3. Voter ID law type 3 means that the voter must present photo identification and/or other biometric data. Voter ID law type 1 is the least restrictive (the voter must give basic personal details), and voter ID law type 2 is in the middle (voter is requested/required to present proof of identification or voter registration card, not photo ID). 
-
-```{r}
-reg_hist = ggplot(data = vote, mapping = aes(x = reg_law)) + 
-  geom_histogram() + labs(
-    x = "Type of Voter Registration Assistance",
-    y = "Number of Countries"
-  )
-reg_hist
-```
-
-This visualization depicts the number of countries that have each kind of voter registration assistance policies (denoted by 1, 2, or 3). It looks like there under 25 countries for ID law type 2, and there are significantly more countries (over 75) that have voter ID law type 1 and 3. Voter ID law type 3 means that the voter must present photo identification and/or other biometric data. Voter ID law type 1 is lassie-faire, 2 is assisted, and 3 is automatic, so there are more countries that use lassie-faire or automatic voter registration policies than assisted voter registration policies. 
+## Results
 
 ```{r}
 vote |>
-  group_by(id_type) |>
-  summarize(turnout_mean = mean(turnout))
+  drop_na() |>
+  mutate(
+    reg_type = case_when(
+    reg_law == 1 ~ "Automatic",
+    reg_law == 2 ~ "Assisted",
+    reg_law == 3 ~ "Laissez Faire"
+  )
+  ) |>
+  group_by(reg_type) |>
+  summarize(turnout_mean = mean(turnout)) |>
+  ggplot(mapping = aes(x = reg_type, y = turnout_mean)) +
+  geom_col() +
+labs(
+  x = "Assistance Type",
+  y = "Turnout"
+)
 ```
 
-It looks like the turnout mean is lowest for the group with the voter ID law type 3, the most restrictive. On face value, it looks like the countries with the most restrictive voter ID laws, on average, have a lower turnout rate. 
-
+On average, it looks like the means of the turnout rates are relatively consistent among the three types of assistance. However, this only examines the means and does not account for variability - see regression analysis below. 
 
 ```{r}
 vote |>
-  group_by(reg_law) |>
-  summarize(turnout_mean = mean(turnout))
+  drop_na() |>
+  group_by(id_type_lab) |>
+  summarize(turnout_mean = mean(turnout)) |>
+  ggplot(mapping = aes(x = id_type_lab, y = turnout_mean)) +
+  geom_col() +
+labs(
+  x = "Voter ID Law Type",
+  y = "Turnout"
+)
 ```
-It looks like the turnout mean is lowest for the group with the voter regisgtration assistance type 2, although there are not substantial differences for each type of policy. 
+
+On average, it looks like the means of the turnout rates are relatively consistent among the three types of voter ID laws, with photo ID laws yielding a slightly lower turnout rate. However, this only examines the means and does not account for variability - see regression analysis below. 
+
+Null hypothesis for voter ID law: There is no difference in parliamentary turnout based on the type of voter ID law a country has. 
+Alternative hypothesis for voter ID law: There is a difference in parliamentary turnout based on the type of voter ID law a country has. 
+Null hypothesis for voter registration assistance law: There is no difference in parliamentary turnout based on the type of voter registration assistance law a country has. 
+Alternative hypothesis for voter registration assistance law: There is a difference in parliamentary turnout based on the type of voter registration assistance law a country has. 
+
+```{r}
+vote_lm = lm(turnout ~ id_type + reg_law, data = vote)
+summary(vote_lm)
+```
+Interpretation of the `id_type` coefficient: according to the model, moving from a less restrictive voter ID law to a more restrictive voter ID law by 1 unit will decrease the turnout rate in parliamentary elections by -4.371 percentage points. In plain English, for instance, if a country changes its voter ID law from 1: Basic Personal Details to 2: Non Photo ID, the model predicts its parliamentary turnout will decrease by -4.371 percentage points.
+
+Interpretation of the `reg_law` coefficient: according to the model, moving from a more proactive voter registration assistance method to a less proactive assistance method by 1 unit will decrease the turnout rate in parliamentary elections by -1.108 percentage points. In plain English, for instance, if a country changes its registration assistance policy from 1: Automatic to 2: Assisted, the model predicts its parliamentary turnout will decrease by -1.108 percentage points.
+
+At the 5% level, the `id_type` coefficient would be statistically significant, as its p-value = 0.039 is less than 0.05. I would reject the null hypothesis that there is no difference in parliamentary turnout based on the type of voter ID law a country has. 
+
+At the 5% level, the `reg_law` coefficient is not statistically significant, as its p-value = 0.4349 is greater than 0.05. I would fail to reject the null hypothesis that there is no difference in parliamentary turnout based on the type of voter registration assistance law a country has. 
+
+For the `reg_law` coefficient, I would not feel confident assuming it represents a causal effect because of the lack of randomization. A degree of randomization would allow for us to assume that countries are nearly identical in other aspects - but there could be a variety of omitted variables that could confound the results of the regression. Therefore, I would not say there is a causal effect based solely on the results of the regression - more exploration is needed (see more in the concluding section). 
+
+
+## Conclusion
+
+For a brief summary of my results, I found that making voter ID laws more restrictive and assistance laws less proactive decreases turnout, but only the change in the voter ID law produces a statistically significant difference at the 5% level. Therefore, I found limited support for the voter ID law portion of my initial hypothesis, which states that increasing the restrictive nature of voter ID laws will decrease turnout. However, I did not find significant support for my hypothesis that decreasing assistance for voter registration would decrease turnout. Some limitations and threats to my analysis are the following. 1: Countries were not selected randomly and the type of voter ID law/assistance law was not assigned randomly, so it is difficult to determine causality. 2: There could be a number of confounding variables, such as the number of polling locations in a country. 3: The turnout rate only captures the turnout in a given year, while regime changes can influence turnout (e.g. having a more polarizing candidate can shape turnout, but this may only be reflected in one year's turnout, so it is difficult to generalize to all elections). My analysis could be improved by potentially using a different way to measure the explanatory variables - instead of a static 1/2/3, perhaps a continuous variable could help better capture the nuances of countries. I would also prefer a method to introduce randomization, such as randomly assigning voter ID laws and assistance laws to counties in the U.S. 

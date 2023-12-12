@@ -33,3 +33,47 @@ vote = vote |>
 cor(vote$turnout, vote$id_type, use = "pairwise")
 ```
 
+## Stuff from Index
+
+
+```{r}
+id_hist = ggplot(data = vote, mapping = aes(x = id_type)) + 
+  geom_histogram() + labs(
+    x = "Type of Voter ID Law",
+    y = "Number of Countries"
+  )
+id_hist
+```
+
+This visualization depicts the number of countries that have each kind of voter ID law (denoted by 1, 2, or 3). It looks like there under 25 countries for ID law type 1 and 2, and there are significantly more countries (about 150) that have voter ID law type 3. Voter ID law type 3 means that the voter must present photo identification and/or other biometric data. Voter ID law type 1 is the least restrictive (the voter must give basic personal details), and voter ID law type 2 is in the middle (voter is requested/required to present proof of identification or voter registration card, not photo ID). 
+
+
+```{r}
+reg_hist = ggplot(data = vote, mapping = aes(x = reg_law)) + 
+  geom_histogram() + labs(
+    x = "Type of Voter Registration Assistance",
+    y = "Number of Countries"
+  )
+reg_hist
+```
+
+
+This visualization depicts the number of countries that have each kind of voter registration assistance policies (denoted by 1, 2, or 3). It looks like there under 25 countries for ID law type 2, and there are significantly more countries (over 75) that have voter ID law type 1 and 3. Voter ID law type 3 means that the voter must present photo identification and/or other biometric data. Voter ID law type 1 is lassie-faire, 2 is assisted, and 3 is automatic, so there are more countries that use lassie-faire or automatic voter registration policies than assisted voter registration policies. 
+
+```{r}
+vote |>
+  group_by(id_type) |>
+  summarize(turnout_mean = mean(turnout))
+```
+
+
+It looks like the turnout mean is lowest for the group with the voter ID law type 3, the most restrictive. On face value, it looks like the countries with the most restrictive voter ID laws, on average, have a lower turnout rate. 
+
+
+```{r}
+vote |>
+  group_by(reg_law) |>
+  summarize(turnout_mean = mean(turnout))
+```
+
+It looks like the turnout mean is lowest for the group with the voter regisgtration assistance type 2, although there are not substantial differences for each type of policy. 
